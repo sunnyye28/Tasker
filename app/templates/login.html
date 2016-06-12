@@ -1,0 +1,30 @@
+{% extends "template.html" %}
+
+{% block content %}
+	
+	<h1>Tasker App</h1>
+	<p class="lead">An app for your team to track tasks</p>
+	
+	<h3>Log In</h3>
+	
+	{% for message in get_flashed_messages() %}
+		<p class="flash">{{message}}</p>
+	{% endfor %}
+	
+	{% if error %}
+		<p class="error">Error: {{error}}</p>
+	{%  endif %}
+	
+	<form action="", method="POST">
+		<div class="form-group">
+			<p>{{form.username.label}}: {{form.username}}</p>
+		</div>
+		<div class="form-group">
+			<p>{{form.password.label}}: {{form.password}}</p>
+		</div>
+		<p><input class="btn btn-primary" type="submit" value="Login"/></p>
+	</form>
+	
+	<p>Need an account? <a href="/register">Sign up!</a></p>
+	
+{% endblock %}

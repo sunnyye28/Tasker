@@ -1,7 +1,7 @@
 from app import app, db
 from flask import Flask, flash, redirect, render_template, request, session, url_for, g
 from functools import wraps
-from app.forms import LoginForm, RegisterForm
+from app.forms import LoginForm, RegisterForm, AddTask
 from app.models import User, Task
 from sqlalchemy.exc import IntegrityError
 
@@ -17,7 +17,7 @@ def login_required(f):
 	return wrap	 
 
 	
-	
+# login view function	
 @app.route('/', methods=['GET', 'POST'])
 def login():
 	error = None
@@ -33,7 +33,7 @@ def login():
 	return render_template('login.html', form=form, error=error)
 	
 	
-
+# register view function
 @app.route('/register', methods=['POST', 'GET'])
 def register():
 	error = None
@@ -59,35 +59,52 @@ def register():
 		
 	return render_template('register.html', form=form, error=error)
 
-	
+# flash errors view function	
 def flash_errors(form):
 	for field, errors in form.errors.items():
 		for error in errors:
 			flash(u"Error in the %s field - %s" % (getattr(form, field).label.text, error), 'error')
 		
-		
+
+# main tasks page view function		
 @app.route('/tasks')
 @login_required	
 def main():
 	
 	incomplete_tasks = Task.query.filter_by(status="Incomplete").order_by(Task.due_date.asc()) 
 	completed_tasks = Task.query.filter_by(status="Completed").order_by(Task.due_date.asc())
+	#form = AddTask(request.form)
 	
-	return render_template('main.html', incomplete_tasks=incomplete_tasks, completed_tasks=completed_tasks)
-	
-	#open_tasks = db.session.query(FTasks).filter_by(status='1').order_by(FTasks.due_date.asc())
-	#closed_tasks = db.session.query(FTasks).filter_by(status='0').order_by(FTasks.due_date.asc())
-	#return render_template('tasks.html', form = AddTask(request.form), open_tasks=open_tasks, closed_tasks=closed_tasks)	
+	return render_template('main.html', incomplete_tasks=incomplete_tasks, completed_tasks=completed_tasks)	
 
+# logout view function		
 @app.route('/logout')
 @login_required	
 def logout():
 	session.pop('logged_in', None)
 	flash("You succesfully logged out.")
 	return redirect(url_for('login'))
-		
-#def addTask():
 
+# add task view function	
+@app.route('/add', methods=['POST'])	
+@login_required
+def addTask():
+	error = None
+	form = AddTask(request.form, csrf_enabled=False)
+	
+	if form.validate_on_submit():
+		new_task = Task(
+					form.name.data,
+					form.due_date.data,
+					form.priority.data,
+					form.status.data
+					)
+		db.session.add(new_task)
+		db.session.commit()
+	else:
+		#error = "Please complete all required fields."
+		flash_errors(form)
+	return redirect(url_for('main'))
 #def completeTask():
 
 #def deleteTask():

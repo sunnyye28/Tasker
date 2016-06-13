@@ -4,7 +4,7 @@ class Task(db.Model):
 	__tablename__ = "tasks"
 	task_id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String, nullable=False)
-	due_date = db.Column(db.Date, nullable=False)
+	due_date = db.Column(db.String, nullable=False)
 	priority = db.Column(db.String, nullable=False)
 	status = db.Column(db.String, nullable=False)
 	

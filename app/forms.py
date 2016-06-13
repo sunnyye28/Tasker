@@ -16,8 +16,8 @@ class RegisterForm(Form):
 
 class AddTask(Form):
 	name = StringField("Task Name", validators=[Required()])
-	due_date = DateField("Due Date", validators=[Required()])
-	priority = SelectField("Priority", validators=[Required()])
-	status = SelectField("Status", validators=[Required()])
+	due_date = StringField("Due Date", validators=[Required()])
+	priority = StringField("Priority", validators=[Required()])
+	status = StringField("Status", validators=[Required()])
 	
 

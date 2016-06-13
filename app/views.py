@@ -1,7 +1,7 @@
 from app import app, db
 from flask import Flask, flash, redirect, render_template, request, session, url_for, g
 from functools import wraps
-from app.forms import LoginForm, RegisterForm, AddTask
+from app.forms import LoginForm, RegisterForm, AddTask 
 from app.models import User, Task
 from sqlalchemy.exc import IntegrityError
 
@@ -107,7 +107,23 @@ def addTask():
 	return redirect(url_for('main'))
 #def completeTask():
 
-#def deleteTask():
+# view function to delete task
+@app.route('/delete/<int:task_id>/')
+@login_required
+def deleteTask(task_id):
+	delete_task = task_id
+	db.session.query(Task).filter_by(task_id=delete_task).delete()
+	db.session.commit()
+	flash("The task was deleted.")
+	return redirect(url_for('main'))
 
+# view function to mark task as complete	
+@app.route('/complete/<int:task_id>/')
+@login_required
+def completeTask(task_id):
+	complete_task = task_id
+	db.session.query(Task).filter_by(task_id=complete_task).update({'status': 'Completed'})
+	db.session.commit()
+	return redirect(url_for('main'))
 
 	

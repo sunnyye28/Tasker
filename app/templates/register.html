@@ -1,0 +1,43 @@
+{% extends "template.html" %}
+
+{% block title %}
+	Registration
+{% endblock %}
+
+{% block content %}
+	
+	<h1>Register</h1>
+	<p class="lead">Enter your details to register an account</p>
+	
+	
+	{% for message in get_flashed_messages() %}
+		<p class="flash">{{message}}</p>
+	{% endfor %}
+	
+	{% if error %}
+		<p class="error">Error: {{error}}</p>
+	{%  endif %}
+	
+	<form action="", method="POST">
+		<div class="form-group">
+			<p>{{form.first_name.label}}: {{form.first_name}}</p>
+		</div>
+		<div class="form-group">
+			<p>{{form.last_name.label}}: {{form.last_name}}</p>
+		</div>
+		<div class="form-group">
+			<p>{{form.username.label}}: {{form.username}}</p>
+		</div>
+		<div class="form-group">
+			<p>{{form.email.label}}: {{form.email}}</p>
+		</div>
+		<div class="form-group">
+			<p>{{form.password.label}}: {{form.password}}</p>
+		</div>
+		<div class="form-group">
+			<p>{{form.confirm_password.label}}: {{form.confirm_password}}</p>
+		</div>
+		<p><input class="btn btn-primary" type="submit" value="Register"/></p>
+	</form>
+	
+{% endblock %}
